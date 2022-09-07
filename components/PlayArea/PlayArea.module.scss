@@ -1,0 +1,12 @@
+.play-area {
+  display: flex;
+  &__utils {
+    height: 100vh;
+    border-right: 1px solid white;
+  }
+  &__field {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 32px;
+  }
+}
