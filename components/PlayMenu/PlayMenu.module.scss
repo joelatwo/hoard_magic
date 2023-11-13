@@ -1,0 +1,32 @@
+.play-menu {
+  margin: 0;
+  margin-left: auto;
+  background-color: lightgrey;
+  padding: 8px;
+  height: 360px;
+  width: 100%;
+  display: flex;
+
+  .game-controls {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .graveyard {
+    .card {
+      opacity: 0.25;
+    }
+  }
+
+  .hand-wrapper {
+    flex: 1;
+    .hand {
+      display: flex;
+      position: relative;
+    }
+  }
+
+  .card {
+    position: relative;
+  }
+}

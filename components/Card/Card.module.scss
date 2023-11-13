@@ -1,9 +1,37 @@
 .card {
+  grid-column: span 1;
+  position: absolute;
+
   &__header {
+    opacity: 0;
     display: flex;
     justify-content: end;
+    position: absolute;
+    width: 100%;
+  }
+
+  &:hover {
+    z-index: 1;
+    .card__header {
+      opacity: 1;
+    }
   }
 
   &__image {
+  }
+
+  &.rare {
+    border: 4px solid gold;
+    border-radius: 12px;
+  }
+
+  &[draggable="true"] {
+    /*
+     To prevent user selecting inside the drag source
+    */
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
   }
 }

@@ -1,88 +1,82 @@
-import React, { useState } from "react";
-import { CardType } from "../../types/model";
+import React, {
+  MutableRefObject,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { CardType, Position } from "../../types/model";
 import { Card } from "../Card";
 import styles from "./PlayArea.module.scss";
-import _ from "lodash";
+import _, { cloneDeep, remove } from "lodash";
 import Image from "next/image";
+import { Button } from "@mui/material";
 import CardBack from "../../assets/Magic_card_back.webp";
+import { useGameStore } from "../Game/GameProvider";
+import { observer } from "mobx-react-lite";
+import { MessageArea } from "../MessageArea";
 
 type IProps = {
   decklist: CardType[];
+  battlefieldCards: CardType[];
+  removeCard?: (index: string) => void;
+  graveyard: CardType[];
+  startANewTurn?: VoidFunction;
+  setBattlefieldCards: any;
 };
 
 type PlayCardListType = CardType;
 
-export const PlayArea = ({ decklist }: IProps) => {
-  const [cardList, setCardList] = useState<PlayCardListType[]>([]);
-  const [topOfDeck, setTopOfDeck] = useState(0);
-  const [discardPile, setDiscardPile] = useState<PlayCardListType[]>([]);
-  const [winCount, setWinCount] = useState(3);
-  const [turnCount, setTurnCount] = useState(0);
-  const [numberOfCardsToDraw, setNumberOfCardsToDraw] = useState(2);
+export const PlayArea = observer(() => {
+  const { battlefield, untapAll, library, graveyard, sendCardToGraveyard } =
+    useGameStore();
 
-  const drawCards = (numberOfCardsToDraw: number = 1) => {
-    const newCardList: PlayCardListType[] = [...cardList];
-    let i = 0;
-    let currentTopOfDeck = topOfDeck;
-    for (; i < numberOfCardsToDraw; i++) {
-      if (topOfDeck < decklist.length) {
-        newCardList.push(decklist[currentTopOfDeck]);
-        currentTopOfDeck++;
-      }
-    }
-    setTopOfDeck(currentTopOfDeck);
-    setCardList(newCardList);
+  const AllowDrop: React.DragEventHandler<HTMLDivElement> = (event) => {
+    event.preventDefault();
   };
 
-  const removeCard = (key: number) => {
-    const newCardList = [...cardList];
-    const removedCards = _.remove(newCardList, (card) => card.key === key);
-    setDiscardPile([...discardPile, ...removedCards]);
-    setCardList(newCardList);
-    if (removedCards[0].rarity === "rare") {
-      setNumberOfCardsToDraw((prev) => prev + 1);
-    }
+  const DropAction: React.DragEventHandler<HTMLDivElement> = (event) => {
+    // console.log(event);
   };
 
-  const takeNewTurn = () => {
-    checkPlayerVictory();
-    drawCards(numberOfCardsToDraw);
-  };
+  // const updateCardPosition = (key: string, newPosition: Position) => {
+  //   const newCardList: CardType[] = [];
 
-  const checkPlayerVictory = () => {
-    if (decklist.length <= topOfDeck) {
-      console.log(decklist.length, topOfDeck);
-      if (winCount > 0) {
-        setWinCount((prev) => prev - 1);
-      }
-    }
-    return false;
-  };
+  //   battlefieldCards.forEach((currentCard) => {
+  //     const newCard = { ...currentCard };
+  //     if (newCard.key === key) {
+  //       newCard.position = newPosition;
+  //     }
+  //     newCardList.push(newCard);
+  //   });
+
+  //   setBattlefieldCards(newCardList);
+  // };
 
   return (
     <div className={styles["play-area"]}>
-      {winCount === 0 && <div>You Win!!!</div>}
-      <div className={styles["play-area__utils"]}>
-        <div>Turn {turnCount}</div>
-        <button onClick={takeNewTurn}>Next Turn</button>
-        <button>Untap</button>
-        <button onClick={takeNewTurn}>Draw</button>
-      </div>
-      <div className={styles["play-area__field"]}>
-        <div>
-          <Image width={200} height={300} src={CardBack}></Image>{" "}
-          {decklist.length - topOfDeck}
+      <div onDrop={DropAction} onDragOver={AllowDrop}>
+        {/* <div className={styles["play-area__utils"]}></div> */}
+        <div
+          className={styles["play-area__field"]}
+          onClick={(event) => {
+            // console.log(event.clientX);
+          }}
+        >
+          {battlefield.map((card) => (
+            <Card
+              key={card.key}
+              sendCardToGraveyard={sendCardToGraveyard}
+              isDraggable
+              card={card}
+              className={`${styles["Card"]} ${
+                styles[card.isTapped ? "isTapped" : "untapped"]
+              }`}
+            />
+          ))}
         </div>
-        <div>
-          <Image width={200} height={300} src={CardBack}></Image>{" "}
-          {discardPile.length}
-        </div>
-        {cardList.map((card) => (
-          <div key={card.key}>
-            <Card removeCard={removeCard} card={card} />
-          </div>
-        ))}
       </div>
+      <MessageArea></MessageArea>
     </div>
   );
-};
+});

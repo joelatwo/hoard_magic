@@ -1,5 +1,7 @@
 .play-area {
-  display: flex;
+  flex: 1;
+  position: relative;
+
   &__utils {
     height: 100vh;
     border-right: 1px solid white;
@@ -7,6 +9,22 @@
   &__field {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 32px;
+  }
+
+  .graveyard {
+    position: relative;
+  }
+
+  .graveyard__placeholder {
+    width: 200px;
+    height: 300px;
+    border: 1px solid blue;
+    border-radius: 10px;
+  }
+
+  .Card {
+    &.isTapped {
+      transform: rotate(90deg);
+    }
   }
 }
