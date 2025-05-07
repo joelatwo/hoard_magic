@@ -1,15 +1,14 @@
-import React, { ReactNode } from "react";
-import { CardType, CreatureCardType, Position } from "../../types/model";
-import {
-  action,
-  autorun,
-  computed,
-  configure,
-  makeObservable,
-  observable,
-} from "mobx";
+/* 
+  Context for the dev team.
+  
+  This is a central MobX store for a React based Magic The Gathering Solo game I was working on.  
+  This class follows the signleton patter and manages all of the overarching state.
+  Many classes/components will have access to these functions.
+*/
 
-// configure({ useProxies: "ifavailable" });
+import { action, computed, makeObservable, observable } from "mobx";
+import { ReactNode } from "react";
+import { CardType, Position } from "../../types/model";
 
 type Message = {
   message: ReactNode;
@@ -91,14 +90,6 @@ export class GameStore {
             yPosition <= card.position?.y &&
             card.position?.y <= yPosition + 300;
 
-          // console.log(
-          //   xPosition,
-          //   card.position?.x,
-          //   xPosition + 200,
-
-          //   xPosition <= card?.position?.x,
-          //   card?.position?.x <= xPosition + 200
-          // );
           return isCardInXPosition && isCardInYPosition;
         }
         return false;
@@ -154,7 +145,6 @@ export class GameStore {
   toggleIsTapped = (key: string) => {
     const updateIndex = this.battlefield.findIndex((card) => card.key === key);
 
-    console.log("Tapping?", this.battlefield[updateIndex]);
     if (this.battlefield[updateIndex].type === "Creature") {
       this.battlefield[updateIndex].isTapped =
         !this.battlefield[updateIndex].isTapped;
@@ -190,6 +180,5 @@ export class GameStore {
 
   accelerateGame = () => {
     this.numberOfCardsToDraw = this.numberOfCardsToDraw + 1;
-    console.log("Game Accelerated");
   };
 }

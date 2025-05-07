@@ -1,15 +1,22 @@
-import { Button, Input, TextField } from "@mui/material";
-import Image from "next/image";
-import React, { use, useEffect, useState } from "react";
-import CardBack from "../../assets/Magic_card_back.webp";
-import { TurnPhasesType } from "../Game/Game";
-import styles from "./PlayMenu.module.scss";
-import { observer } from "mobx-react-lite";
-import { useGameStore } from "../Game/GameProvider";
-import { Card } from "../Card";
-import { debounce } from "lodash";
-import { CardType } from "../../types/model";
+/* 
+  Context for the dev team. 
+  
+  This component pairs nicely with the GameStore MobX file.
+  This is where the user would access and change the state as they progress.
+  Due to the nature of the personal project I was still in the process of determining the overall architecture.
+  Therefore I choose to keep these files in 1 location and clean them up once this was more refined.
+*/
 
+import { Button, TextField } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useState } from "react";
+import CardBack from "../../assets/Magic_card_back.webp";
+import { CardType } from "../../types/model";
+import { Card } from "../Card";
+import { useGameStore } from "../Game/GameProvider";
+import styles from "./PlayMenu.module.scss";
+
+// TODO: Move this into it's own file where it would be more appropriate.
 export const PlayMenu = observer((): JSX.Element => {
   const {
     untapAll,
@@ -92,6 +99,7 @@ type LibraryProps = {
   startANewTurn: VoidFunction;
 };
 
+// TODO: Move this into it's own file.
 const Library = ({ library, startANewTurn }: LibraryProps) => {
   return (
     <div className="library" onClick={startANewTurn}>
@@ -118,12 +126,13 @@ type GraveyardProps = {
   graveyard: CardType[];
 };
 
+// TODO: Move this into it's own file.
 const Graveyard = ({ graveyard }: GraveyardProps) => {
   return (
     <div
       className={styles["graveyard"]}
       onClick={() => {
-        // console.log(graveyard);
+        // TODO: handle the graveyard.
       }}
     >
       <div>Graveyard</div>
@@ -158,6 +167,7 @@ type HandProps = {
   hand: CardType[];
 };
 
+// TODO: Move this into it's own file.
 const Hand = ({ hand }: HandProps) => {
   return (
     <div className={styles["hand-wrapper"]}>

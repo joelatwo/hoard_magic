@@ -1,3 +1,10 @@
+/* 
+  Context for the dev team. 
+  
+  This component handles the display logic for a given card.
+  The goal was to handle the ability for cards to rotate(tap) and be dragged around the screen.
+*/
+
 import Image from "next/image";
 import React, { DragEventHandler, useEffect, useState } from "react";
 import { CardType, Position } from "../../types/model";
